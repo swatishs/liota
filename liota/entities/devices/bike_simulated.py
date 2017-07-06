@@ -30,6 +30,8 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from __future__ import division
+from past.utils import old_div
 import threading
 import time
 import random
@@ -83,8 +85,8 @@ class BikeSimulated(Device):
             self.slope = min(
                 max(self.slope +
                     random.uniform(-0.01, 0.01) * self.interval,
-                    -math.pi / 16
-                    ), math.pi / 16
+                    old_div(-math.pi, 16)
+                    ), old_div(math.pi, 16)
             )
 
             # Change revolution

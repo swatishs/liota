@@ -30,15 +30,16 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from builtins import object
 from abc import ABCMeta, abstractmethod
+from future.utils import with_metaclass
 
 
-class DCCComms:
+class DCCComms(with_metaclass(ABCMeta, object)):
 
     """
     Abstract base class for all DCC communications.
     """
-    __metaclass__ = ABCMeta
 
     #-----------------------------------------------------------------------
     # If a specific DCCComms has parameters to establish connection, pass

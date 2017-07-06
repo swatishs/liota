@@ -32,14 +32,13 @@
 
 from abc import ABCMeta, abstractmethod
 from threading import Thread
+from future.utils import with_metaclass
 
-class DeviceSimulator(Thread):
+class DeviceSimulator(with_metaclass(ABCMeta, Thread)):
     """
     DeviceSimulator is ABC (abstract base class) of all device beaconing classes.
     Developers should extend DeviceSimulator class and implement the abstract methods.
     """
-
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def __init__(self, name):

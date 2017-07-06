@@ -31,14 +31,18 @@
 # ----------------------------------------------------------------------------#
 
 from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from past.builtins import basestring
 import logging
 import os
 import re
 import fcntl
 import errno
-import ConfigParser
+import configparser
 from threading import Thread, Lock
-from Queue import Queue
+from queue import Queue
 from time import sleep
 
 from liota.lib.utilities.utility import LiotaConfigPath
@@ -122,7 +126,7 @@ class SimulatorThread(Thread):
 
     def _get_config_from_file(self):
         # Parse Liota configuration file
-        config = ConfigParser.RawConfigParser()
+        config = configparser.RawConfigParser()
         config.optionxform=str
         fullPath = LiotaConfigPath().get_liota_fullpath()
         if fullPath != '':
@@ -131,7 +135,7 @@ class SimulatorThread(Thread):
                     try:
                         # retrieve device info file storage directory
                         self.dev_file_path = config.get('IOTCC_PATH', 'dev_file_path')
-                    except ConfigParser.ParsingError as err:
+                    except configparser.ParsingError as err:
                         log.error('Could not parse log config file' + err)
                         exit(-4)
                     if not os.path.exists(self.dev_file_path):
@@ -173,7 +177,7 @@ class SimulatorThread(Thread):
                                 self.endpoint_list[key] = value
                             else:
                                 log.error(key + ' is currently not supported!')
-                        for key in self.endpoint_list.iterkeys():
+                        for key in self.endpoint_list.keys():
                             log.debug("endpoint_list:(%s : %s)\n" % (key, self.endpoint_list[key]))
 
                         global DEVICE_TYPE_SAFE_REGEX
@@ -186,7 +190,7 @@ class SimulatorThread(Thread):
                             if value is None or value == "None":
                                 continue
                             self.type_key_map[key] = value
-                        for key in self.type_key_map.iterkeys():
+                        for key in self.type_key_map.keys():
                             log.debug("type_key_map:(%s : %s)\n" % (key, self.type_key_map[key]))
 
                         # retrieve device type to DCC mapping list
@@ -201,11 +205,11 @@ class SimulatorThread(Thread):
                             tmp_list2 = [x.strip() for x in value.split(',')]
                             self.type_dcc_map[key] = tmp_list2
                             self.type_tuple_key_dcc_pkg[key] = (self.type_key_map[key], tmp_list2)
-                        for key in self.type_dcc_map.iterkeys():
+                        for key in self.type_dcc_map.keys():
                             log.debug("type_dcc_map:(%s : %s)\n" % (key, self.type_dcc_map[key]))
-                        for key in self.type_tuple_key_dcc_pkg.iterkeys():
+                        for key in self.type_tuple_key_dcc_pkg.keys():
                             log.debug("type_tuple_key_dcc_pkg:(%s : %s)\n" % (key, self.type_tuple_key_dcc_pkg[key]))
-                    except ConfigParser.ParsingError:
+                    except configparser.ParsingError:
                         log.error('Could not parse log config file')
                         exit(-4)
                 else:
@@ -253,25 +257,25 @@ class SimulatorThread(Thread):
             stats[0] = str(self._config['cmd_msg_pipe']) + '\n\t'
             tmp = ''
             endpoint_list = self._config['endpoint_list']
-            for key in endpoint_list.iterkeys():
+            for key in endpoint_list.keys():
                 tmp += str(key) + ': ' + str(endpoint_list[key]) + '\n\t\t'
             stats[1] = tmp
 
             tmp = ''
             type_dcc_map = self._config['type_dcc_map']
-            for key in type_dcc_map.iterkeys():
+            for key in type_dcc_map.keys():
                 tmp += str(key) + ': ' + str(type_dcc_map[key]) + '\n\t\t'
             stats[2] = tmp
 
             tmp = ''
             type_key_map = self._config['type_key_map']
-            for key in type_key_map.iterkeys():
+            for key in type_key_map.keys():
                 tmp += str(key) + ': ' + str(type_key_map[key]) + '\n\t\t'
             stats[3] = tmp
 
             tmp = ''
             type_tuple_key_dcc_pkg = self._config['type_tuple_key_dcc_pkg']
-            for key in type_tuple_key_dcc_pkg.iterkeys():
+            for key in type_tuple_key_dcc_pkg.keys():
                 tmp += str(key) + ': ' + str(type_tuple_key_dcc_pkg[key]) + '\n\t\t'
             stats[4] = tmp
 
@@ -292,18 +296,15 @@ class SimulatorThread(Thread):
             import threading
 
             log.warning("Active threads - \n\t%s"
-                        % "\n\t".join(map(
-                            lambda tref: "%s: %016x %s %s" % (
+                        % "\n\t".join(["%s: %016x %s %s" % (
                                 tref.name,
                                 tref.ident,
                                 type(tref).__name__.split(".")[-1],
                                 tref.isAlive()
-                            ),
-                            sorted(
+                            ) for tref in sorted(
                                 threading.enumerate(),
                                 key=lambda tref: tref.ident
-                            )
-                        ))
+                            )])
                         )
             return
         log.warning("Unsupported list")
@@ -330,7 +331,7 @@ class SimulatorThread(Thread):
         endpoint_list = self._config['endpoint_list']
 
         # spin listening threads according to endpoint_list extracted config
-        for key in endpoint_list.iterkeys():
+        for key in endpoint_list.keys():
             value = endpoint_list[key]
             log.debug("Endpoint:{0}:{1}".format(key, value))
             if value is None or value == "None":
@@ -418,7 +419,7 @@ class SimulatorThread(Thread):
                     "terminate_messenger_but_you_should_not_do_this_yourself\n")
 
         log.info("terminate simulator threads...")
-        for k, v in self._simulators.items():
+        for k, v in list(self._simulators.items()):
             if v is not None:
                 v.clean_up()
                 del self._simulators[k]

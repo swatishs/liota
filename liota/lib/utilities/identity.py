@@ -30,12 +30,13 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from builtins import object
 import logging
 
 log = logging.getLogger(__name__)
 
 
-class Identity:
+class Identity(object):
     """
     This class encapsulates certificates and credentials related to a connection both at Dcc and Device side.
     """

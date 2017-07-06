@@ -30,6 +30,8 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 from __future__ import print_function
+from builtins import str
+from builtins import object
 import json
 import time
 import logging
@@ -38,7 +40,7 @@ from liota.dev_sims.device_simulator import DeviceSimulator
 
 logg = logging.getLogger(__name__)
 
-class Agent():
+class Agent(object):
 
     def __init__(self, ip, port, path):
         self.ip = ip

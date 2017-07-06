@@ -31,14 +31,18 @@
 # ----------------------------------------------------------------------------#
 
 from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from past.builtins import basestring
 import logging
 import os
 import re
 import fcntl
 import errno
-import ConfigParser
+import configparser
 from threading import Thread, Lock
-from Queue import Queue
+from queue import Queue
 
 from liota.lib.utilities.utility import LiotaConfigPath, DiscUtilities
 from liota.disc_listeners.named_pipe import NamedPipeListener
@@ -95,7 +99,7 @@ class DiscoveryThread(Thread):
 
     def _get_config_from_file(self):
         # Parse Liota configuration file
-        config = ConfigParser.RawConfigParser()
+        config = configparser.RawConfigParser()
         config.optionxform=str
         fullPath = LiotaConfigPath().get_liota_fullpath()
         if fullPath != '':
@@ -106,7 +110,7 @@ class DiscoveryThread(Thread):
                         self.dev_file_path = config.get('IOTCC_PATH', 'dev_file_path')
                         # retrieve organization info file storage directory
                         self.org_file_path = config.get('IOTCC_PATH', 'iotcc_path')
-                    except ConfigParser.ParsingError as err:
+                    except configparser.ParsingError as err:
                         log.error('Could not parse log config file' + err)
                         exit(-4)
                     if not os.path.exists(self.dev_file_path):
@@ -150,7 +154,7 @@ class DiscoveryThread(Thread):
                                 self.endpoint_list[key] = value
                             else:
                                 log.error(key + ' is currently not supported!')
-                        for key in self.endpoint_list.iterkeys():
+                        for key in self.endpoint_list.keys():
                             log.debug("endpoint_list:(%s : %s)\n" % (key, self.endpoint_list[key]))
 
                         global DEVICE_TYPE_SAFE_REGEX
@@ -163,7 +167,7 @@ class DiscoveryThread(Thread):
                             if value is None or value == "None":
                                 continue
                             self.type_key_map[key] = value
-                        for key in self.type_key_map.iterkeys():
+                        for key in self.type_key_map.keys():
                             log.debug("type_key_map:(%s : %s)\n" % (key, self.type_key_map[key]))
 
                         # retrieve device type to DCC mapping list
@@ -178,11 +182,11 @@ class DiscoveryThread(Thread):
                             tmp_list2 = [x.strip() for x in value.split(',')]
                             self.type_dcc_map[key] = tmp_list2
                             self.type_tuple_key_dcc_pkg[key] = (self.type_key_map[key], tmp_list2)
-                        for key in self.type_dcc_map.iterkeys():
+                        for key in self.type_dcc_map.keys():
                             log.debug("type_dcc_map:(%s : %s)\n" % (key, self.type_dcc_map[key]))
-                        for key in self.type_tuple_key_dcc_pkg.iterkeys():
+                        for key in self.type_tuple_key_dcc_pkg.keys():
                             log.debug("type_tuple_key_dcc_pkg:(%s : %s)\n" % (key, self.type_tuple_key_dcc_pkg[key]))
-                    except ConfigParser.ParsingError:
+                    except configparser.ParsingError:
                         log.error('Could not parse log config file')
                         exit(-4)
                 else:
@@ -236,25 +240,25 @@ class DiscoveryThread(Thread):
             stats[0] = str(self._config['cmd_msg_pipe']) + '\n\t'
             tmp = ''
             endpoint_list = self._config['endpoint_list']
-            for key in endpoint_list.iterkeys():
+            for key in endpoint_list.keys():
                 tmp += str(key) + ': ' + str(endpoint_list[key]) + '\n\t\t'
             stats[1] = tmp
 
             tmp = ''
             type_dcc_map = self._config['type_dcc_map']
-            for key in type_dcc_map.iterkeys():
+            for key in type_dcc_map.keys():
                 tmp += str(key) + ': ' + str(type_dcc_map[key]) + '\n\t\t'
             stats[2] = tmp
 
             tmp = ''
             type_key_map = self._config['type_key_map']
-            for key in type_key_map.iterkeys():
+            for key in type_key_map.keys():
                 tmp += str(key) + ': ' + str(type_key_map[key]) + '\n\t\t'
             stats[3] = tmp
 
             tmp = ''
             type_tuple_key_dcc_pkg = self._config['type_tuple_key_dcc_pkg']
-            for key in type_tuple_key_dcc_pkg.iterkeys():
+            for key in type_tuple_key_dcc_pkg.keys():
                 tmp += str(key) + ': ' + str(type_tuple_key_dcc_pkg[key]) + '\n\t\t'
             stats[4] = tmp
 
@@ -284,7 +288,7 @@ class DiscoveryThread(Thread):
                     % "\n\t".join(
                         ['Device Name: %s\n\t Type: %s\n\t Reg_info: %s' %
                         (key, self._devices_discoverd[key][0], self._devices_discoverd[key][1])
-                        for key in self._devices_discoverd.iterkeys()]
+                        for key in self._devices_discoverd.keys()]
                         )
                     )
             return
@@ -293,18 +297,15 @@ class DiscoveryThread(Thread):
             import threading
 
             log.warning("Active threads - \n\t%s"
-                        % "\n\t".join(map(
-                            lambda tref: "%s: %016x %s %s" % (
+                        % "\n\t".join(["%s: %016x %s %s" % (
                                 tref.name,
                                 tref.ident,
                                 type(tref).__name__.split(".")[-1],
                                 tref.isAlive()
-                            ),
-                            sorted(
+                            ) for tref in sorted(
                                 threading.enumerate(),
                                 key=lambda tref: tref.ident
-                            )
-                        ))
+                            )])
                         )
             return
         log.warning("Unsupported list")
@@ -331,7 +332,7 @@ class DiscoveryThread(Thread):
         endpoint_list = self._config['endpoint_list']
 
         # spin listening threads according to endpoint_list extracted config
-        for key in endpoint_list.iterkeys():
+        for key in endpoint_list.keys():
             value = endpoint_list[key]
             log.debug("Endpoint:{0}:{1}".format(key, value))
             if value is None or value == "None":
@@ -415,7 +416,7 @@ class DiscoveryThread(Thread):
                     "terminate_messenger_but_you_should_not_do_this_yourself\n")
 
         log.info("terminate listening threads...")
-        for k, v in self._listeners.items():
+        for k, v in list(self._listeners.items()):
             if v is not None:
                 v.clean_up()
                 del self._listeners[k]
@@ -452,7 +453,7 @@ class DiscoveryThread(Thread):
 
         org_group_properties = iotcc_details_json_obj["OGProperties"]
         # merge org properties into prop_dict
-        new_prop_dict = dict(prop_dict.items() + org_group_properties.items())
+        new_prop_dict = dict(list(prop_dict.items()) + list(org_group_properties.items()))
         return new_prop_dict
 
     def reg_device(self, dcc_pkg, edge_system_pkg, name, dev_type, prop_dict):
@@ -492,14 +493,14 @@ class DiscoveryThread(Thread):
         log.debug("device_msg_process")
         type_dcc_map = self._config['type_dcc_map']
         type_key_map = self._config['type_key_map']
-        for key in type_dcc_map.iterkeys():
+        for key in type_dcc_map.keys():
             log.debug("type_dcc_map:(%s : %s)\n" % (key, type_dcc_map[key]))
 
         global DEVICE_TYPE_SAFE_REGEX
         global DEVICE_KEY_SAFE_REGEX
         global DEVICE_VAL_SAFE_REGEX
         try:
-            for key, value in data.iteritems():
+            for key, value in data.items():
                 if not re.match(DEVICE_TYPE_SAFE_REGEX, key):
                     log.warning("device type {0} contains unacceptable character".format(key))
                     return False
@@ -512,7 +513,7 @@ class DiscoveryThread(Thread):
                 if unique_key is None:
                     continue
                 unique_key_value = ''
-                for k, v in value.iteritems():
+                for k, v in value.items():
                     if not re.match(DEVICE_KEY_SAFE_REGEX, k):
                         log.warning("Property key {0} contains unacceptable character".format(k))
                         return False

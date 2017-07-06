@@ -30,6 +30,7 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from builtins import object
 class RegisteredEntity(object):
 
     def __init__(self, ref_entity, ref_dcc, reg_entity_id):

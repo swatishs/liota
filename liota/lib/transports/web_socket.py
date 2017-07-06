@@ -30,18 +30,21 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 import json
 import logging
 import os
 import ssl
 import sys
 from websocket import create_connection
-import Queue
+import queue
 
 log = logging.getLogger(__name__)
 
 
-class WebSocket():
+class WebSocket(object):
     """ WebSocket class implementation
 
     """

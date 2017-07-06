@@ -29,6 +29,9 @@
 #  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF     #
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
+from __future__ import division
+from builtins import range
+from past.utils import old_div
 import logging
 from liota.dccs.dcc import DataCenterComponent
 from liota.entities.metrics.registered_metric import RegisteredMetric
@@ -66,7 +69,7 @@ class Graphite(DataCenterComponent):
                 # Graphite expects time in seconds, not milliseconds. Hence,
                 # dividing by 1000
                 message += '%s %s %d\n' % (reg_metric.ref_entity.name,
-                                           v[1], v[0] / 1000)
+                                           v[1], old_div(v[0], 1000))
         if message == '':
             return
         log.info ("Publishing values to Graphite DCC")

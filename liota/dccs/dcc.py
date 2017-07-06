@@ -30,22 +30,23 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from builtins import object
 import logging
 from abc import ABCMeta, abstractmethod
 
 from liota.entities.entity import Entity
 from liota.dcc_comms.dcc_comms import DCCComms
 from liota.entities.metrics.registered_metric import RegisteredMetric
+from future.utils import with_metaclass
 
 log = logging.getLogger(__name__)
 
 
-class DataCenterComponent:
+class DataCenterComponent(with_metaclass(ABCMeta, object)):
 
     """
     Abstract base class for all DCCs.
     """
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def __init__(self, comms):

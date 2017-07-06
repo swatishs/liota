@@ -30,14 +30,17 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 import os
 import sys
 import json
 import stat
 import fcntl
-import thread
+import _thread
 import logging
-from Queue import Queue
+from queue import Queue
 from threading import Thread
 
 from liota.lib.utilities.utility import DiscUtilities

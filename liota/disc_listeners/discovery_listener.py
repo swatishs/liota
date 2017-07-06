@@ -32,14 +32,13 @@
 
 from abc import ABCMeta, abstractmethod
 from threading import Thread
+from future.utils import with_metaclass
 
-class DiscoveryListener(Thread):
+class DiscoveryListener(with_metaclass(ABCMeta, Thread)):
     """
     DiscoveryListener is ABC (abstract base class) of all listening classes.
     Developers should extend DiscoveryListener class and implement the abstract methods.
     """
-
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def __init__(self, name):

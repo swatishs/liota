@@ -30,9 +30,12 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 import json
 import socket
-import thread
+import _thread
 from threading import Thread
 import logging
 from liota.disc_listeners.discovery_listener import DiscoveryListener
@@ -95,7 +98,7 @@ class SocketListener(DiscoveryListener):
         while self.flag_alive:
             conn, addr = self.sock.accept() # set connection with client
             log.info('Got connection from {0}'.format(addr))
-            thread.start_new_thread(self.on_new_client, (conn, addr,))
+            _thread.start_new_thread(self.on_new_client, (conn, addr,))
             self.conn_rec.append(conn)
         self.sock.close()
 

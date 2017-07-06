@@ -29,8 +29,10 @@
 #  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF     #
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
+from future import standard_library
+standard_library.install_aliases()
 import logging
-import Queue
+import queue
 from liota.lib.transports.web_socket import WebSocket
 
 from liota.dcc_comms.dcc_comms import DCCComms
@@ -45,7 +47,7 @@ class WebSocketDccComms(DCCComms):
         self.url = url
         self.verify_cert = verify_cert
         self.identity = identity
-        self.userdata = Queue.Queue()
+        self.userdata = queue.Queue()
         self._connect()
 
     def _connect(self):

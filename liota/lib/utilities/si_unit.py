@@ -30,6 +30,9 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from __future__ import division
+from builtins import str
+from past.utils import old_div
 import re
 import pint
 import pint.errors
@@ -50,7 +53,7 @@ prefixes = {
     1e+21:      "zetta",    1e-21:      "zepto",
     1e+24:      "yotta",    1e-24:      "yocto"
 }
-prefixes_long = prefixes.values()
+prefixes_long = list(prefixes.values())
 
 #---------------------------------------------------------------------------
 # These are regular expression objects we use to convert pint strings to
@@ -119,7 +122,7 @@ def _get_unit_name(unit):
 
     if(str_temp == "dimensionless"):
         return None
-    for re_obj, repl in re_obj_replaces.items():
+    for re_obj, repl in list(re_obj_replaces.items()):
         str_temp = re_obj.sub(repl, str_temp)
 
     # Detect higher powers and throw exception
@@ -135,7 +138,7 @@ def _get_unit_name(unit):
     str_temp = re.compile(r"\s\/\s").sub(" ", str_temp, count=1)
 
     # Apply name patches
-    for re_obj, repl in re_obj_patches.items():
+    for re_obj, repl in list(re_obj_patches.items()):
         str_temp = re_obj.sub(repl, str_temp)
 
     return str_temp
@@ -196,13 +199,13 @@ units_table_1 = lambda ureg: [
 ]
 units_table_2 = lambda ureg: [
     ureg.m ** 2,            ureg.m ** 3,
-    ureg.m / ureg.s,        ureg.m / ureg.s ** 2,
+    old_div(ureg.m, ureg.s),        old_div(ureg.m, ureg.s ** 2),
     ureg.m ** -1,
-    ureg.kg / ureg.m ** 3,  ureg.kg / ureg.m ** 2,
-    ureg.m ** 3 / ureg.kg,
-    ureg.A / ureg.m ** 2,   ureg.A / ureg.m,
-    ureg.mol / ureg.m ** 3, ureg.kg / ureg.m ** 3,
-    ureg.cd / ureg.m ** 2,
+    old_div(ureg.kg, ureg.m ** 3),  old_div(ureg.kg, ureg.m ** 2),
+    old_div(ureg.m ** 3, ureg.kg),
+    old_div(ureg.A, ureg.m ** 2),   old_div(ureg.A, ureg.m),
+    old_div(ureg.mol, ureg.m ** 3), old_div(ureg.kg, ureg.m ** 3),
+    old_div(ureg.cd, ureg.m ** 2),
     ureg.dimensionless,     ureg.dimensionless
 ]
 units_table_3 = lambda ureg: [
@@ -211,23 +214,23 @@ units_table_3 = lambda ureg: [
     ureg.ohm,   ureg.S,     ureg.Wb,    ureg.T,     ureg.H,
     ureg.degC,  ureg.lm,    ureg.lx,    ureg.Bq,    ureg.Gy,
     ureg.Sv,
-    ureg.mol / ureg.s  # katal (kat) is not supported by pint at this time
+    old_div(ureg.mol, ureg.s)  # katal (kat) is not supported by pint at this time
 ]
 units_table_4 = lambda ureg: [
     ureg.Pa * ureg.s,
-    ureg.N * ureg.m,        ureg.N / ureg.m,
-    ureg.rad / ureg.s,      ureg.rad / ureg.s ** 2,
-    ureg.W / ureg.m ** 2,
-    ureg.J / ureg.K,        ureg.J / (ureg.kg * ureg.K),
-    ureg.J / ureg.kg,       ureg.W / (ureg.m * ureg.K),
-    ureg.J / ureg.m ** 3,
-    ureg.V / ureg.m,        ureg.C / ureg.m ** 3,
-    ureg.C / ureg.m ** 2,   ureg.C / ureg.m ** 2,
-    ureg.F / ureg.m,        ureg.H / ureg.m,
-    ureg.J / ureg.mol,      ureg.J / (ureg.mol * ureg.K),
-    ureg.C / ureg.kg,       ureg.Gy / ureg.s,
-    ureg.W / ureg.sr,       ureg.W / (ureg.m ** 2 * ureg.sr),
-    (ureg.mol / ureg.s) / ureg.m ** 3
+    ureg.N * ureg.m,        old_div(ureg.N, ureg.m),
+    old_div(ureg.rad, ureg.s),      old_div(ureg.rad, ureg.s ** 2),
+    old_div(ureg.W, ureg.m ** 2),
+    old_div(ureg.J, ureg.K),        old_div(ureg.J, (ureg.kg * ureg.K)),
+    old_div(ureg.J, ureg.kg),       old_div(ureg.W, (ureg.m * ureg.K)),
+    old_div(ureg.J, ureg.m ** 3),
+    old_div(ureg.V, ureg.m),        old_div(ureg.C, ureg.m ** 3),
+    old_div(ureg.C, ureg.m ** 2),   old_div(ureg.C, ureg.m ** 2),
+    old_div(ureg.F, ureg.m),        old_div(ureg.H, ureg.m),
+    old_div(ureg.J, ureg.mol),      old_div(ureg.J, (ureg.mol * ureg.K)),
+    old_div(ureg.C, ureg.kg),       old_div(ureg.Gy, ureg.s),
+    old_div(ureg.W, ureg.sr),       old_div(ureg.W, (ureg.m ** 2 * ureg.sr)),
+    old_div((old_div(ureg.mol, ureg.s)), ureg.m ** 3)
 ]
 unit_tables = lambda ureg: [
     units_table_1(ureg),

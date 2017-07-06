@@ -30,15 +30,17 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from past.builtins import basestring
+from builtins import object
 from abc import ABCMeta, abstractmethod
 from liota.entities.registered_entity import RegisteredEntity
+from future.utils import with_metaclass
 
-class Entity:
+class Entity(with_metaclass(ABCMeta, object)):
 
     """
     Abstract base class for all entities.
     """
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def __init__(self, name, entity_id, entity_type):

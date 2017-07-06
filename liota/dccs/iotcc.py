@@ -30,13 +30,18 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import range
+from past.builtins import basestring
 import json
 import logging
 import time
 import threading
-import ConfigParser
+import configparser
 import os
-import Queue
+import queue
 from time import gmtime, strftime
 from threading import Lock
 
@@ -236,7 +241,7 @@ class IotControlCenter(DataCenterComponent):
                 "property_data": []
             }
         }
-        for key, value in properties.items():
+        for key, value in list(properties.items()):
             msg["body"]["property_data"].append({"propertyKey": key, "propertyValue": value})
         return msg
 
@@ -398,7 +403,7 @@ class IotControlCenter(DataCenterComponent):
 
     def write_entity_json_file(self, prop_dict, attribute_list, uuid, remove):
         if prop_dict is not None:
-            for key in prop_dict.iterkeys():
+            for key in prop_dict.keys():
                 value = prop_dict[key]
                 if key == 'entity type' or key == 'name' or key == 'device type':
                     continue
@@ -508,7 +513,7 @@ class IotControlCenter(DataCenterComponent):
             else:
                 tmp_dict.update({"device type": ""})
             if (tmp_dict is not None) and (prop_dict is not None):
-                new_prop_dict = dict(tmp_dict.items() + prop_dict.items())
+                new_prop_dict = dict(list(tmp_dict.items()) + list(prop_dict.items()))
             else:
                 new_prop_dict = tmp_dict
         else:
@@ -517,7 +522,7 @@ class IotControlCenter(DataCenterComponent):
                 and (tmp_dict["device type"] == dev_type)):
                 # the same entity
                 if (tmp_dict is not None) and (prop_dict is not None):
-                    new_prop_dict = dict(tmp_dict.items() + prop_dict.items())
+                    new_prop_dict = dict(list(tmp_dict.items()) + list(prop_dict.items()))
                 else:
                     new_prop_dict = tmp_dict
             else:
@@ -527,7 +532,7 @@ class IotControlCenter(DataCenterComponent):
                 else:
                     tmp_dict.update({"device type": ""})
                 if (tmp_dict is not None) and (prop_dict is not None):
-                    new_prop_dict = dict(tmp_dict.items() + prop_dict.items())
+                    new_prop_dict = dict(list(tmp_dict.items()) + list(prop_dict.items()))
                 else:
                     new_prop_dict = tmp_dict
 
@@ -542,7 +547,7 @@ class IotControlCenter(DataCenterComponent):
             return
 
     def _get_file_storage_path(self, name):
-        config = ConfigParser.RawConfigParser()
+        config = configparser.RawConfigParser()
         fullPath = LiotaConfigPath().get_liota_fullpath()
         if fullPath != '':
             try:
@@ -551,7 +556,7 @@ class IotControlCenter(DataCenterComponent):
                         # retrieve device info file storage directory
                         file_path = config.get('IOTCC_PATH', name)
                         log.debug("_get_{0} file_path:{1}".format(name, file_path))
-                    except ConfigParser.ParsingError as err:
+                    except configparser.ParsingError as err:
                         log.error('Could not open config file ' + err)
                         return None
                     if not os.path.exists(file_path):

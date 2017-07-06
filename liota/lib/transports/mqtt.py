@@ -30,6 +30,9 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from builtins import str
+from builtins import range
+from builtins import object
 import logging
 import os
 import ssl
@@ -44,7 +47,7 @@ from liota.lib.utilities.utility import systemUUID
 log = logging.getLogger(__name__)
 
 
-class Mqtt():
+class Mqtt(object):
     """
     MQTT Transport implementation for LIOTA. It internally uses Python Paho library.
     """
@@ -358,7 +361,7 @@ class Mqtt():
         return self._paho_client._client_id
 
 
-class QoSDetails:
+class QoSDetails(object):
     """
     Encapsulates config parameters related to Quality of Service
     """
@@ -374,7 +377,7 @@ class QoSDetails:
         self.retry = retry
 
 
-class MqttMessagingAttributes:
+class MqttMessagingAttributes(object):
     """
     Encapsulates MessagingAttributes related to MQTT.
 
@@ -417,7 +420,7 @@ class MqttMessagingAttributes:
             self.sub_topic = sub_topic
 
         #  General validation
-        if pub_qos not in range(0, 3) or sub_qos not in range(0, 3):
+        if pub_qos not in list(range(0, 3)) or sub_qos not in list(range(0, 3)):
             log.error("QoS should either be 0 or 1 or 2")
             raise ValueError("QoS should either be 0 or 1 or 2")
         if not isinstance(pub_retain, bool):

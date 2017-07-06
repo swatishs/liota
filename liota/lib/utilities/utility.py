@@ -34,6 +34,11 @@
 
 """
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from past.builtins import basestring
+from builtins import object
 from datetime import datetime
 import ast
 import hashlib
@@ -43,7 +48,7 @@ import platform
 import random
 import uuid
 import errno
-import ConfigParser
+import configparser
 import stat
 import json
 import subprocess
@@ -52,7 +57,7 @@ import time
 log = logging.getLogger(__name__)
 
 
-class systemUUID:
+class systemUUID(object):
     __UUID = ''
 
     def __init__(self):
@@ -148,7 +153,7 @@ def get_disk_name():
 
 
 def getUTCmillis():
-    return long(1000 * ((datetime.utcnow() - datetime(1970, 1, 1)).total_seconds()))
+    return int(1000 * ((datetime.utcnow() - datetime(1970, 1, 1)).total_seconds()))
 
 
 def mkdir(path):
@@ -173,7 +178,7 @@ def store_edge_system_uuid(entity_name, entity_id, reg_entity_id):
     """
     try:
         uuid_path = read_liota_config('UUID_PATH', 'uuid_path')
-        uuid_config = ConfigParser.RawConfigParser()
+        uuid_config = configparser.RawConfigParser()
         uuid_config.optionxform = str
         uuid_config.add_section('GATEWAY')
         uuid_config.set('GATEWAY', 'name', entity_name)
@@ -183,7 +188,7 @@ def store_edge_system_uuid(entity_name, entity_id, reg_entity_id):
             uuid_config.set('GATEWAY', 'registered-uuid', reg_entity_id)
         with open(uuid_path, 'w') as configfile:
             uuid_config.write(configfile)
-    except ConfigParser.ParsingError as err:
+    except configparser.ParsingError as err:
         log.error('Could not open config file ' + str(err))
 
 
@@ -204,7 +209,7 @@ def sha1sum(path_file):
     return sha1
 
 
-class LiotaConfigPath:
+class LiotaConfigPath(object):
     path_liota_config = ''
     syswide_path = '/etc/liota/conf/'
 
@@ -242,7 +247,7 @@ class LiotaConfigPath:
         Setup logging configuration
         """
         log = logging.getLogger(__name__)
-        config = ConfigParser.RawConfigParser()
+        config = configparser.RawConfigParser()
         fullPath = self.get_liota_fullpath()
         if fullPath != '':
             try:
@@ -251,7 +256,7 @@ class LiotaConfigPath:
                     try:
                         log_path = config.get('LOG_PATH', 'log_path')
                         log_cfg = config.get('LOG_CFG', 'json_path')
-                    except ConfigParser.ParsingError as err:
+                    except configparser.ParsingError as err:
                         log.error('Could not parse log config file')
                 else:
                     raise IOError('Cannot open configuration file ' + fullPath)
@@ -278,14 +283,14 @@ def read_liota_config(section, name):
     """
     Returns the value of name within the specified section.
     """
-    config = ConfigParser.RawConfigParser()
+    config = configparser.RawConfigParser()
     fullPath = LiotaConfigPath().get_liota_fullpath()
     if fullPath != '':
         try:
             if config.read(fullPath) != []:
                 try:
                     value = config.get(section, name)
-                except ConfigParser.ParsingError as err:
+                except configparser.ParsingError as err:
                     log.error('Could not parse log config file' + str(err))
             else:
                 raise IOError('Cannot open configuration file ' + fullPath)
@@ -302,17 +307,17 @@ def read_user_config(config_file_path):
     Returns the user defined configuration as a dictionary from DEFAULT section.
     """
 
-    config = ConfigParser.RawConfigParser()
+    config = configparser.RawConfigParser()
     config.optionxform = str
     config.read(config_file_path)
 
     user_config = dict(config.items('DEFAULT'))
-    for key, value in dict(config.items('DEFAULT')).iteritems():
+    for key, value in dict(config.items('DEFAULT')).items():
         user_config[key] = ast.literal_eval(value)
     return user_config
 
 
-class DiscUtilities:
+class DiscUtilities(object):
     """
     DiscUtilities is a wrapper of utility functions
     """

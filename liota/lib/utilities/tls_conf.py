@@ -30,12 +30,13 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from builtins import object
 import logging
 
 log = logging.getLogger(__name__)
 
 
-class TLSConf:
+class TLSConf(object):
     """
     This class encapsulates TLS config related parameters.
     """

@@ -30,7 +30,11 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
-from Queue import Queue
+from past.builtins import cmp
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from queue import Queue
 import inspect
 import logging
 from liota.core import metric_handler

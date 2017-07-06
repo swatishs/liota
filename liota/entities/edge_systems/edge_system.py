@@ -33,14 +33,14 @@
 from abc import ABCMeta, abstractmethod
 
 from liota.entities.entity import Entity
+from future.utils import with_metaclass
 
 
-class EdgeSystem(Entity):
+class EdgeSystem(with_metaclass(ABCMeta, Entity)):
 
     """
     Abstract base class for all edge systems (gateways).
     """
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def __init__(self, name, entity_id, entity_type="EdgeSystem"):

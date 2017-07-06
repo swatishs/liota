@@ -30,6 +30,12 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import map
+from builtins import str
+from past.builtins import basestring
+from builtins import object
 import logging
 import imp
 import os
@@ -37,11 +43,12 @@ import fcntl
 import stat
 import re
 from threading import Thread, Lock
-from Queue import Queue
+from queue import Queue
 from time import sleep
 from abc import ABCMeta, abstractmethod
 
 from liota.lib.utilities.utility import read_liota_config, sha1sum
+from future.utils import with_metaclass
 
 log = logging.getLogger(__name__)
 
@@ -92,7 +99,7 @@ package_startup_list_path = os.path.abspath(
     read_liota_config('PKG_CFG', 'pkg_list')
 )
 
-class ResourceRegistryPerPackage:
+class ResourceRegistryPerPackage(object):
     """
     ResourceRegistryPerPackage creates temporary objects for packages while
     loading, so when they register their resource refs, we can keep track of
@@ -114,7 +121,7 @@ class ResourceRegistryPerPackage:
         return self._outer.has(identifier)
 
 
-class ResourceRegistry:
+class ResourceRegistry(object):
     """
     ResourceRegistry is a wrapped structure for Liota packages to register
     resources and find resources registered by other packages.
@@ -151,13 +158,11 @@ class ResourceRegistry:
         return ResourceRegistryPerPackage(self, package_name)
 
 
-class LiotaPackage:
+class LiotaPackage(with_metaclass(ABCMeta, object)):
     """
     LiotaPackage is ABC (abstract base class) of all package classes.
     Developers should extend LiotaPackage class and implement the abstract methods.
     """
-
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def run(self, registry):
@@ -168,7 +173,7 @@ class LiotaPackage:
         raise NotImplementedError
 
 
-class PackageRecord:
+class PackageRecord(object):
     """
     PackageRecord is instantiated for each package loaded.
     It contains necessary information of packages, including but may not be
@@ -213,7 +218,7 @@ class PackageRecord:
         return self._ext
 
     def get_dependents(self):
-        return self._dependents.keys()
+        return list(self._dependents.keys())
 
     def add_dependent(self, file_name):
         self._dependents[file_name] = None
@@ -269,18 +274,15 @@ class PackageThread(Thread):
             import threading
 
             log.warning("Active threads - \n\t%s"
-                        % "\n\t".join(map(
-                            lambda tref: "%s: %016x %s %s" % (
+                        % "\n\t".join(["%s: %016x %s %s" % (
                                 tref.name,
                                 tref.ident,
                                 type(tref).__name__.split(".")[-1],
                                 tref.isAlive()
-                            ),
-                            sorted(
+                            ) for tref in sorted(
                                 threading.enumerate(),
                                 key=lambda tref: tref.ident
-                            )
-                        ))
+                            )])
                         )
             return
         log.warning("Unsupported list")
@@ -316,10 +318,7 @@ class PackageThread(Thread):
 
             stats = ["n/a", "n/a", "n/a", "n/a"]
             if isinstance(collect_thread_pool, CollectionThreadPool):
-                stats = map(
-                    lambda n: str(n),
-                    collect_thread_pool.get_stats_working()
-                )
+                stats = [str(n) for n in collect_thread_pool.get_stats_working()]
             log.warning(("Status of collection threads - \n\t"
                          + "Collecting: %s\n\t"
                          + "Alive: %s\n\t"
@@ -448,10 +447,10 @@ class PackageThread(Thread):
                     self._package_load_auto()
             elif command == "unload_all":
                 with package_lock:
-                    self._package_unload_list(self._packages_loaded.keys())
+                    self._package_unload_list(list(self._packages_loaded.keys()))
             elif command == "update_all":
                 with package_lock:
-                    self._package_update_list(self._packages_loaded.keys())
+                    self._package_update_list(list(self._packages_loaded.keys()))
             elif command == "terminate":
                 if self._terminate_all():
                     self.flag_alive = False
@@ -831,7 +830,7 @@ class PackageThread(Thread):
             track_list.reverse()
             log.info("Packages will be reloaded: %s"
                      % " ".join(
-                         map(lambda item: item[0], track_list)
+                         [item[0] for item in track_list]
                      )
                      )
             for track_item in track_list:
@@ -888,7 +887,7 @@ class PackageThread(Thread):
             track_list.reverse()
             log.info("Packages will be reloaded and updated: %s"
                      % " ".join(
-                         map(lambda item: item[0], track_list)
+                         [item[0] for item in track_list]
                      )
                      )
             for track_item in track_list:
@@ -932,7 +931,7 @@ class PackageThread(Thread):
         for file_string in package_list:
             log.debug("Attempting to load packages:{0}".format(file_string))
             try:
-                for file_name, checksum in file_string.items():
+                for file_name, checksum in list(file_string.items()):
                     if file_name in self._packages_loaded:
                         continue
                     if not self._package_load(file_name, checksum, autoload_flag):
@@ -979,7 +978,7 @@ class PackageThread(Thread):
         for file_string in package_list:
             log.debug("Attempting to update packages:{0}".format(file_string))
             try:
-                for filename, checksum in file_string.items():
+                for filename, checksum in list(file_string.items()):
                     filename_list.append(filename)
             except:
                 log.exception("_package_update_list exception")
@@ -998,7 +997,7 @@ class PackageThread(Thread):
         # Load all dependents
         if len(track_list) > 0:
             track_string_list = []
-            map(lambda x: track_string_list.append({x[0]: x[2]}), track_list)
+            list(map(lambda x: track_string_list.append({x[0]: x[2]}), track_list))
             if not self._package_load_list(track_string_list, autoload_flag):
                 flag_failed = True
 
@@ -1129,7 +1128,7 @@ class PackageThread(Thread):
                     "terminate_messenger_but_you_should_not_do_this_yourself\n")
 
         log.info("Unloading packages...")
-        if not self._package_unload_list(self._packages_loaded.keys()):
+        if not self._package_unload_list(list(self._packages_loaded.keys())):
             log.error("Some packages failed to unload. See log for details")
             return False
 

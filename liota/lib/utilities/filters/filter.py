@@ -30,13 +30,15 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from builtins import object
 from abc import ABCMeta, abstractmethod
 import logging
+from future.utils import with_metaclass
 
 log = logging.getLogger(__name__)
 
 
-class Filter:
+class Filter(with_metaclass(ABCMeta, object)):
     """
     Abstract base class for all Filters.
 
@@ -44,7 +46,6 @@ class Filter:
     time systems will be working normally.  Sending all those normal data to DCC is not desired most of the time,
     as there is always storage and processing overhead involved.
     """
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def __init__(self):

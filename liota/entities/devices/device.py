@@ -32,13 +32,13 @@
 
 from abc import ABCMeta, abstractmethod
 from liota.entities.entity import Entity
+from future.utils import with_metaclass
 
-class Device(Entity):
+class Device(with_metaclass(ABCMeta, Entity)):
 
     """
     Abstract base class for all devices (things).
     """
-    __metaclass__ = ABCMeta
 
     #-----------------------------------------------------------------------
     # Constructor of Device is not made abstract, so developer can create a

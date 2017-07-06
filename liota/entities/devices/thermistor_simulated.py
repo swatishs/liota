@@ -30,6 +30,8 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from __future__ import division
+from past.utils import old_div
 import threading
 import time
 import random
@@ -49,7 +51,7 @@ class ThermistorSimulated(Device):
 
         self.u = u                  # Total voltage
         self.r0 = r0                # Reference resistor
-        self.ux = self.u / 2        # Initial voltage on thermistor
+        self.ux = old_div(self.u, 2)        # Initial voltage on thermistor
         self.c1 = 1.40e-3
         self.c2 = 2.37e-4
         self.c3 = 9.90e-8
@@ -98,10 +100,10 @@ class ThermistorSimulated(Device):
         return self.ureg.volt * self.ux
 
     def get_c1(self):
-        return self.c1 / self.ureg.kelvin
+        return old_div(self.c1, self.ureg.kelvin)
 
     def get_c2(self):
-        return self.c2 / self.ureg.kelvin
+        return old_div(self.c2, self.ureg.kelvin)
 
     def get_c3(self):
-        return self.c3 / self.ureg.kelvin
+        return old_div(self.c3, self.ureg.kelvin)

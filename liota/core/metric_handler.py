@@ -30,7 +30,14 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
-from Queue import Queue, PriorityQueue, Full
+from __future__ import division
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import range
+from builtins import object
+from past.utils import old_div
+from queue import Queue, PriorityQueue, Full
 import heapq
 import logging
 from threading import Thread, Condition, Lock
@@ -104,9 +111,9 @@ class EventsPriorityQueue(PriorityQueue):
                         log.debug("Early termination of dead metric")
                         first_element = self._get()
                         break
-                    timeout = (
+                    timeout = old_div((
                         first_element.get_next_run_time() - getUTCmillis()
-                    ) / 1000.0
+                    ), 1000.0)
                     log.debug("Waiting on acquired first_element_changed LOCK "
                              + "for: %.2f" % timeout)
                     self.first_element_changed.wait(timeout)
@@ -212,7 +219,7 @@ class CollectionThread(Thread):
                 raise e
 
 
-class CollectionThreadPool:
+class CollectionThreadPool(object):
 
     def __init__(self, num_threads):
         self._num_threads = num_threads

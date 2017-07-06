@@ -30,6 +30,7 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 from __future__ import print_function
+from builtins import str
 import json
 import logging
 import time

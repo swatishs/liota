@@ -30,8 +30,11 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 import logging
-import Queue
+import queue
 
 from liota.dcc_comms.dcc_comms import DCCComms
 from liota.lib.transports.mqtt import Mqtt, MqttMessagingAttributes
@@ -101,7 +104,7 @@ class MqttDccComms(DCCComms):
         self.tls_conf = tls_conf
         self.qos_details = qos_details
         self.clean_session = clean_session
-        self.userdata = Queue.Queue()
+        self.userdata = queue.Queue()
         self.protocol = protocol
         self.transport = transport
         self.keep_alive = keep_alive

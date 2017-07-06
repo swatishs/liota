@@ -30,6 +30,7 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from builtins import object
 import logging
 import json
 import time
@@ -52,7 +53,7 @@ def require_field(container, field):
         log.error("Missing {} field {0}", format(field))
 
 
-class HelixProtocol:
+class HelixProtocol(object):
 
     """
     Simple state machine for protocol to IoT Control Center adapter.
@@ -92,7 +93,7 @@ class HelixProtocol:
         self.state = state
 
 
-class State:
+class State(object):
     def __init__(self, previous, proto=None):
         if proto is None:
             proto = previous.proto
