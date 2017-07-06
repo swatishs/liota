@@ -30,6 +30,8 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from __future__ import division
+from past.utils import old_div
 from liota.core.package_manager import LiotaPackage
 from liota.lib.utilities.utility import read_user_config
 
@@ -62,28 +64,28 @@ class PackageClass(LiotaPackage):
         def get_speed(revolution, radius):
             return revolution * radius
 
-        @ureg.check(ureg.m / ureg.sec)
+        @ureg.check(old_div(ureg.m, ureg.sec))
         @static_vars(speed_last=None, time_last=None)
         def get_acceleration(speed):
             t = time.time()
             if get_acceleration.time_last is None:
                 acc = 0 * ureg.m / ureg.sec ** 2
             else:
-                acc = (speed - get_acceleration.speed_last) / \
-                      ((t - get_acceleration.time_last) * ureg.sec)
+                acc = old_div((speed - get_acceleration.speed_last), \
+                      ((t - get_acceleration.time_last) * ureg.sec))
             get_acceleration.speed_last = speed
             get_acceleration.time_last = t
             return acc
 
-        @ureg.check(ureg.m ** 2, ureg.m / ureg.sec, ureg.kg / ureg.m ** 3)
+        @ureg.check(ureg.m ** 2, old_div(ureg.m, ureg.sec), old_div(ureg.kg, ureg.m ** 3))
         def get_resistance(area, speed, k):
             return (k * area * speed ** 2)
 
-        @ureg.check(ureg.kg, ureg.m / ureg.sec ** 2)
+        @ureg.check(ureg.kg, old_div(ureg.m, ureg.sec ** 2))
         def get_force(mass, acceleration):
             return mass * acceleration
 
-        @ureg.check(ureg.newton, ureg.m / ureg.sec)
+        @ureg.check(ureg.newton, old_div(ureg.m, ureg.sec))
         def get_power(force, speed):
             return force * speed
 
@@ -95,7 +97,7 @@ class PackageClass(LiotaPackage):
             speed = get_speed(
                 bike_model.get_revolution(),
                 bike_model.get_radius_wheel()
-            ).to(ureg.m / ureg.sec)
+            ).to(old_div(ureg.m, ureg.sec))
             return speed.magnitude
 
         #-------------------------------------------------------------------
@@ -160,7 +162,7 @@ class PackageClass(LiotaPackage):
         metric_name = "model.bike.speed"
         bike_speed = Metric(
             name=metric_name,
-            unit=(ureg.m / ureg.sec),
+            unit=(old_div(ureg.m, ureg.sec)),
             interval=5,
             sampling_function=self.get_bike_speed
         )

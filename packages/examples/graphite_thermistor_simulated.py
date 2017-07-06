@@ -30,6 +30,8 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from __future__ import division
+from past.utils import old_div
 from liota.core.package_manager import LiotaPackage
 
 dependencies = ["graphite", "examples/thermistor_simulator"]
@@ -62,16 +64,16 @@ class PackageClass(LiotaPackage):
             return rx
 
         @ureg.check(
-            1 / ureg.kelvin,
-            1 / ureg.kelvin,
-            1 / ureg.kelvin,
+            old_div(1, ureg.kelvin),
+            old_div(1, ureg.kelvin),
+            old_div(1, ureg.kelvin),
             ureg.ohm)
         def get_temperature(c1, c2, c3, rx):
-            temper = 1 / (
+            temper = old_div(1, (
                 c1 +
-                c2 * math.log(rx / ureg.ohm) +
-                c3 * math.log(rx / ureg.ohm) ** 3
-            )
+                c2 * math.log(old_div(rx, ureg.ohm)) +
+                c3 * math.log(old_div(rx, ureg.ohm)) ** 3
+            ))
 
             #---------------------------------------------------------------
             # Here commented is a counter example, showing how a dimension
