@@ -31,6 +31,8 @@
 # ----------------------------------------------------------------------------#
 
 from __future__ import print_function
+from __future__ import division
+from past.utils import old_div
 import random
 
 from linux_metrics import cpu_stat, disk_stat, net_stat, mem_stat
@@ -85,7 +87,7 @@ def read_cpu_utilization(sample_duration_sec=1):
 def read_swap_mem_free():
     total_swap = round(mem_stat.mem_stats()[4], 4)
     swap_mem_free = round(mem_stat.mem_stats()[5], 4)
-    swap_free_percent = (swap_mem_free/total_swap)*100
+    swap_free_percent = (old_div(swap_mem_free,total_swap))*100
     return round(swap_free_percent, 2)
 
 
@@ -96,7 +98,7 @@ def read_disk_usage_stats():
 def read_mem_free():
     total_mem = round(mem_stat.mem_stats()[1], 4)
     free_mem = round(mem_stat.mem_stats()[3], 4)
-    mem_free_percent = ((total_mem-free_mem)/total_mem)*100
+    mem_free_percent = (old_div((total_mem-free_mem),total_mem))*100
     return round(mem_free_percent, 2)
     
 

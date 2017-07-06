@@ -30,10 +30,12 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
-import Queue
+from future import standard_library
+standard_library.install_aliases()
+import queue
 import random
 import time
-import thread
+import _thread
 from liota.dcc_comms.socket_comms import SocketDccComms
 from liota.dccs.graphite import Graphite
 from liota.entities.metrics.metric import Metric
@@ -43,7 +45,7 @@ from liota.lib.utilities.utility import read_user_config
 # getting values from conf file
 config = read_user_config('sampleProp.conf')
 
-comms_channel = Queue.Queue() # channel between device and a udm used for a metric
+comms_channel = queue.Queue() # channel between device and a udm used for a metric
 
 #simulates a device putting data into a comms channel at random intervals
 def simulated_event_device(write_channel):
@@ -52,7 +54,7 @@ def simulated_event_device(write_channel):
         write_channel.put(random.randint(1,300))
 
 # starting the simulated device
-thread.start_new_thread(simulated_event_device, (comms_channel,))
+_thread.start_new_thread(simulated_event_device, (comms_channel,))
 
 def udm1():
     return comms_channel.get(block=True)

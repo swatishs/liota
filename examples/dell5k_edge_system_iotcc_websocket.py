@@ -31,6 +31,8 @@
 # ----------------------------------------------------------------------------#
 
 from __future__ import print_function
+from __future__ import division
+from past.utils import old_div
 from linux_metrics import cpu_stat, disk_stat, net_stat, mem_stat
 
 from liota.dccs.iotcc import IotControlCenter
@@ -90,7 +92,7 @@ def read_network_bytes_received():
 def read_mem_free():
     total_mem = round(mem_stat.mem_stats()[1],4)
     free_mem = round(mem_stat.mem_stats()[3],4)
-    mem_free_percent = ((total_mem-free_mem)/total_mem)*100
+    mem_free_percent = (old_div((total_mem-free_mem),total_mem))*100
     return round(mem_free_percent, 2)
 
     

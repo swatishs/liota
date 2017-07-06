@@ -31,7 +31,9 @@
 # ----------------------------------------------------------------------------#
 
 from __future__ import print_function
-import Queue
+from future import standard_library
+standard_library.install_aliases()
+import queue
 
 import pint
 
@@ -53,8 +55,8 @@ config = read_user_config('samplePropMqtt.conf')
 ureg = pint.UnitRegistry()
 
 # Store temperature values in Queue
-kitchen_temperature_data = Queue.Queue()
-living_room_temperature_data = Queue.Queue()
+kitchen_temperature_data = queue.Queue()
+living_room_temperature_data = queue.Queue()
 
 
 # Callback functions

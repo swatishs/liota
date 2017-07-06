@@ -31,6 +31,8 @@
 # ----------------------------------------------------------------------------#
 
 from __future__ import print_function
+from __future__ import division
+from past.utils import old_div
 from liota.entities.edge_systems.dk300_edge_system import Dk300EdgeSystem
 from liota.lib.utilities.identity import Identity
 from liota.dccs.iotcc import IotControlCenter
@@ -70,13 +72,13 @@ def get_rx(u, r0, ux):
     return rx
 
 
-@ureg.check(1 / ureg.kelvin, 1 / ureg.kelvin, 1 / ureg.kelvin, ureg.ohm)
+@ureg.check(old_div(1, ureg.kelvin), old_div(1, ureg.kelvin), old_div(1, ureg.kelvin), ureg.ohm)
 def get_temperature(c1, c2, c3, rx):
-    temper = 1 / ( \
+    temper = old_div(1, ( \
         c1 + \
-        c2 * math.log(rx / ureg.ohm) + \
-        c3 * math.log(rx / ureg.ohm) ** 3
-    )
+        c2 * math.log(old_div(rx, ureg.ohm)) + \
+        c3 * math.log(old_div(rx, ureg.ohm)) ** 3
+    ))
 
     # -----------------------------------------------------------------------
     # Here commented is a counter example, showing how a dimension mismatch
