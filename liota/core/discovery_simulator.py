@@ -30,6 +30,7 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from __future__ import print_function
 import logging
 import os
 import re
@@ -349,7 +350,7 @@ class SimulatorThread(Thread):
                         self._simulators[key] = socket_thread
                 else:
                     log.warning("because security consideration, Socket Endpoint is not allowed!")
-                    print "because security consideration, Socket Endpoint is not allowed!"
+                    print("because security consideration, Socket Endpoint is not allowed!")
             if key.find('mqtt') != -1:
                 mqtt_thread = MqttSimulator(mqtt_cfg=value,
                         name=key+"_Thread", simulator=self)
@@ -363,7 +364,7 @@ class SimulatorThread(Thread):
                         self._simulators[key] = coap_thread
                 else:
                     log.warning("because security consideration, Coap Endpoint is not allowed!")
-                    print "because security consideration, Coap Endpoint is not allowed!"
+                    print("because security consideration, Coap Endpoint is not allowed!")
 
         # Listen on message queue for management or statistic commands
         global cmd_message_queue

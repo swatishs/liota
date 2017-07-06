@@ -87,7 +87,7 @@ class WebSocket():
                 log.error("Identity object is missing")
                 raise ValueError("Identity object is missing")
             if self.ws is None:
-                raise (IOError("Couldn't verify host certificate"))
+                raise IOError
 
     def receive(self, queue):
         try:

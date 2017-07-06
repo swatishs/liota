@@ -29,6 +29,7 @@
 #  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF     #
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
+from __future__ import print_function
 import json
 import time
 import logging
@@ -95,19 +96,19 @@ class CoapSimulator(DeviceSimulator):
         self.agent = Agent(self.ip, self.port, "message")
 
         logg.debug("CoapSimulator is initialized")
-        print "CoapSimulator is initialized"
+        print("CoapSimulator is initialized")
         self.flag_alive = True
         self.start()
 
     def run(self):
         if self.flag_alive:
             logg.info('CoapSimulator is running')
-            print 'CoapSimulator is running'
+            print('CoapSimulator is running')
             self.agent.putResource()
             while self.flag_alive:
                 time.sleep(100)
         else:
-            print "Thread exits"
+            print("Thread exits")
         logg.info("Thread exits: %s" % str(self.name))
 
     def clean_up(self):

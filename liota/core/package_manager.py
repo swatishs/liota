@@ -1246,7 +1246,7 @@ def initialize():
                 log.error("Could not create directory for messenger pipe")
                 return
         try:
-            os.mkfifo(package_messenger_pipe, 0600)
+            os.mkfifo(package_messenger_pipe, 0o600)
             log.info("Created pipe: " + package_messenger_pipe)
         except OSError:
             package_messenger_pipe = None

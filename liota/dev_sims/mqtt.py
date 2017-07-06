@@ -30,6 +30,7 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from __future__ import print_function
 import json
 import time
 import logging
@@ -87,7 +88,7 @@ class MqttSimulator(DeviceSimulator):
                                          keep_alive=int(mqtt_cfg['keep_alive']), enable_authentication=False)
 
         log.debug("MqttSimulator is initialized")
-        print "MqttSimulator is initialized"
+        print("MqttSimulator is initialized")
         self.cfg_sets = mqtt_cfg
         self.cnt = 0
         self.flag_alive = True
@@ -102,7 +103,7 @@ class MqttSimulator(DeviceSimulator):
             }
         }
         log.info('MqttSimulator is running')
-        print "MqttSimulator is running"
+        print("MqttSimulator is running")
         while self.flag_alive:
             if self.cnt >= 5:
                 time.sleep(1000);

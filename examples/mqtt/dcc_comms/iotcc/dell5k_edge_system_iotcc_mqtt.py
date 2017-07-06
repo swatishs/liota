@@ -30,6 +30,7 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from __future__ import print_function
 from linux_metrics import cpu_stat, disk_stat, net_stat, mem_stat
 from liota.dccs.iotcc import IotControlCenter
 from liota.lib.utilities.identity import Identity
@@ -202,4 +203,4 @@ if __name__ == '__main__':
         reg_mem_free_metric.start_collecting()
 
     except RegistrationFailure:
-        print "Registration to IOTCC failed"
+        print("Registration to IOTCC failed")

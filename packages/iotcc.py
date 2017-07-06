@@ -30,6 +30,7 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from __future__ import print_function
 from liota.core.package_manager import LiotaPackage
 from liota.lib.utilities.utility import read_user_config
 
@@ -76,7 +77,7 @@ class PackageClass(LiotaPackage):
             registry.register("iotcc", self.iotcc)
             registry.register("iotcc_edge_system", self.iotcc_edge_system)
         except RegistrationFailure:
-            print "EdgeSystem registration to IOTCC failed"
+            print("EdgeSystem registration to IOTCC failed")
         self.iotcc.set_properties(self.iotcc_edge_system, config['SystemPropList'])
 
     def clean_up(self):

@@ -50,7 +50,7 @@ class PackageClass(LiotaPackage):
             with open(iotcc_json_path, 'r') as f:
                 iotcc_details_json_obj = json.load(f)["iotcc"]
             f.close()
-        except IOError, err:
+        except IOError as err:
             return
 
         organization_group_properties = iotcc_details_json_obj["OGProperties"]

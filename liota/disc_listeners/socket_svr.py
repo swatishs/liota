@@ -29,6 +29,7 @@
 #  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF     #
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
+from __future__ import print_function
 import json
 import socket
 import thread
@@ -58,7 +59,7 @@ class SocketListener(DiscoveryListener):
         self.sock.bind((self.host, self.port)) # Bind to the port
         self.discovery = discovery
         log.info('SocketListener is initialized')
-        print 'SocketListener is initialized'
+        print('SocketListener is initialized')
         self.flag_alive = True
         self.start()
 
@@ -78,7 +79,7 @@ class SocketListener(DiscoveryListener):
                 Thread(target=self.proc_dev_msg, name="SocketMsgProc_Thread", args=(payload,)).start()
                 msg = "Received~"
                 conn.sendall(msg)
-            except ValueError, err:
+            except ValueError as err:
                 # json can't be parsed
                 log.error('Value: {0}, Error:{1}'.format(msg, str(err)))
                 continue
@@ -87,7 +88,7 @@ class SocketListener(DiscoveryListener):
 
     def run(self):
         log.info('SocketListener Server started!')
-        print 'SocketListener Server started!'
+        print('SocketListener Server started!')
         log.info('Waiting for clients...')
         self.sock.listen(5)     # Now wait for client connection.
         self.conn_rec = []

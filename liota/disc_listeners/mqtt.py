@@ -30,6 +30,7 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from __future__ import print_function
 import json
 import logging
 from threading import Thread
@@ -58,7 +59,7 @@ class MqttListener(DiscoveryListener):
             try:
                 payload = json.loads(message.payload)
                 Thread(target=self.proc_dev_msg, name="MqttMsgProc_Thread", args=(payload,)).start()
-            except ValueError, err:
+            except ValueError as err:
                 # json can't be parsed
                 log.error('Value: {0}, Error:{1}'.format(message.payload, str(err)))
                 return
@@ -80,7 +81,7 @@ class MqttListener(DiscoveryListener):
         else:
             self.topic = str(str_list[2])
         log.debug("MqttListener is initialized")
-        print "MqttListener is initialized"
+        print("MqttListener is initialized")
         self.discovery = discovery
 
         self.cfg_sets = mqtt_cfg
@@ -123,7 +124,7 @@ class MqttListener(DiscoveryListener):
             # Add callback methods
             self.mqtt_conn.subscribe(self.topic, 2, self.callback_msg_proc)
             log.debug("MqttListener is running")
-            print "MqttListener is running"
+            print("MqttListener is running")
         else:
             log.info("Thread exits: %s" % str(self.name))
             self.mqtt_conn._disconnect()

@@ -183,7 +183,7 @@ def store_edge_system_uuid(entity_name, entity_id, reg_entity_id):
             uuid_config.set('GATEWAY', 'registered-uuid', reg_entity_id)
         with open(uuid_path, 'w') as configfile:
             uuid_config.write(configfile)
-    except ConfigParser.ParsingError, err:
+    except ConfigParser.ParsingError as err:
         log.error('Could not open config file ' + str(err))
 
 
@@ -338,7 +338,7 @@ class DiscUtilities:
                     log.error("Could not create directory for messenger pipe")
                     return False
             try:
-                os.mkfifo(pipe_file, 0600)
+                os.mkfifo(pipe_file, 0o600)
                 log.info("Created pipe: " + pipe_file)
             except OSError:
                 log.error("Could not create messenger pipe")

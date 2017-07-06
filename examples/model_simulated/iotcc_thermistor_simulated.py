@@ -30,6 +30,7 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from __future__ import print_function
 from liota.entities.edge_systems.dk300_edge_system import Dk300EdgeSystem
 from liota.lib.utilities.identity import Identity
 from liota.dccs.iotcc import IotControlCenter
@@ -168,4 +169,4 @@ if __name__ == '__main__':
         reg_thermistor_temper.start_collecting()
 
     except RegistrationFailure:
-        print "Registration to IOTCC failed"
+        print("Registration to IOTCC failed")

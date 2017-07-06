@@ -29,6 +29,7 @@
 #  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF     #
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
+from __future__ import print_function
 import os
 import sys
 import json
@@ -80,7 +81,7 @@ class NamedPipeListener(DiscoveryListener):
             if ph:
                 os.close(ph)
         log.debug('NamedPipeListener is initialized')
-        print 'NamedPipeListener is initialized'
+        print('NamedPipeListener is initialized')
         self.flag_alive = True
         self.start()
 
@@ -90,7 +91,7 @@ class NamedPipeListener(DiscoveryListener):
 
     def run(self):
         log.info('NamedPipeListener is running')
-        print 'NamedPipeListener is running'
+        print('NamedPipeListener is running')
         while self.flag_alive:
             with open(self._pipe_file, "r") as fp:
                 data = ''
@@ -103,7 +104,7 @@ class NamedPipeListener(DiscoveryListener):
                             payload = json.loads(data)
                             Thread(target=self.proc_dev_msg, name="PipeMsgProc_Thread", args=(payload,)).start()
                             data = ''
-                        except ValueError, err:
+                        except ValueError as err:
                             # json can't be parsed
                             log.error('Value: {0}, Error:{1}'.format(data, str(err)))
                             continue

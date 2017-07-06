@@ -30,6 +30,7 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from __future__ import print_function
 import logging
 import os
 import re
@@ -348,7 +349,7 @@ class DiscoveryThread(Thread):
                         self._listeners[key] = socket_thread
                 else:
                     log.warning("because security consideration, Socket Endpoint is not allowed!")
-                    print "because security consideration, Socket Endpoint is not allowed!"
+                    print("because security consideration, Socket Endpoint is not allowed!")
             if key.find('mqtt') != -1:
                 mqtt_thread = MqttListener(mqtt_cfg=value, name=key+"_Thread", discovery=self)
                 if mqtt_thread is not None:
@@ -360,7 +361,7 @@ class DiscoveryThread(Thread):
                         self._listeners[key] = coap_thread
                 else:
                     log.warning("because security consideration, Coap Endpoint is not allowed!")
-                    print "because security consideration, Coap Endpoint is not allowed!"
+                    print("because security consideration, Coap Endpoint is not allowed!")
 
         # Listen on message queue for management or statistic commands
         self.cmd_messenger_thread = \
@@ -446,7 +447,7 @@ class DiscoveryThread(Thread):
             with open(iotcc_json_path, 'r') as f:
                 iotcc_details_json_obj = json.load(f)[key]
             f.close()
-        except IOError, err:
+        except IOError as err:
             return prop_dict
 
         org_group_properties = iotcc_details_json_obj["OGProperties"]

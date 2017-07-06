@@ -29,6 +29,7 @@
 #  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF     #
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
+from __future__ import print_function
 import os
 import sys
 import time
@@ -80,7 +81,7 @@ class NamedPipeSimulator(DeviceSimulator):
                 os.close(ph)
 
         log.debug("NamedPipeSimulator is initialized")
-        print "NamedPipeSimulator is initialized"
+        print("NamedPipeSimulator is initialized")
         self.cnt = 0
         self.flag_alive = True
         self.start()
@@ -94,7 +95,7 @@ class NamedPipeSimulator(DeviceSimulator):
             }
         }
         log.debug("NamedPipeSimulator is running")
-        print "NamedPipeSimulator is running"
+        print("NamedPipeSimulator is running")
         while self.flag_alive:
             if self.cnt >= 5:
                 time.sleep(1000);

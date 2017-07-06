@@ -29,6 +29,7 @@
 #  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF     #
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
+from __future__ import print_function
 import json
 import logging
 import time
@@ -61,7 +62,7 @@ class MsgResource (Resource):
             payload = json.loads(request.payload)
 
             Thread(target=self.proc_dev_msg, name="CoapMsgProc_Thread", args=(payload, self.disc, )).start()
-        except ValueError, err:
+        except ValueError as err:
             # json can't be parsed
             logg.error('Value: {0}, Error:{1}'.format(request.payload, str(err)))
 
@@ -103,13 +104,13 @@ class CoapListener(DiscoveryListener):
         self.discovery = discovery
         self.flag_alive = True
         logg.debug("CoapListener is initialized")
-        print "CoapListener is initialized"
+        print("CoapListener is initialized")
         self.start()
 
     def run(self):
         if self.flag_alive:
             logg.info('CoapListerner is running')
-            print 'CoapListerner is running'
+            print('CoapListerner is running')
 
             # start coap server
             self.server = CoAPServer(self.ip, self.port, multicast=False, disc=self.discovery)
@@ -119,12 +120,12 @@ class CoapListener(DiscoveryListener):
                     time.sleep(100)
                 logg.info("Thread exits: %s" % str(self.name))
             except KeyboardInterrupt:
-                print "Server Shutdown"
+                print("Server Shutdown")
                 self.server.close()
-                print "Exiting..."
+                print("Exiting...")
         else:
             logg.info("Thread exits: %s" % str(self.name))
-            print "Thread exits:", str(self.name)
+            print("Thread exits:", str(self.name))
 
     def clean_up(self):
         self.flag_alive = False

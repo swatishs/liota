@@ -30,6 +30,7 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from __future__ import print_function
 import Queue
 
 import pint
@@ -207,4 +208,4 @@ if __name__ == "__main__":
         reg_living_room_temp.start_collecting()
 
     except RegistrationFailure:
-        print "Registration to IOTCC failed"
+        print("Registration to IOTCC failed")

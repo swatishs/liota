@@ -30,6 +30,7 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from __future__ import absolute_import
 import ConfigParser
 import errno
 import json
@@ -37,7 +38,7 @@ import logging
 import logging.config
 import os
 
-from lib.utilities.utility import systemUUID, LiotaConfigPath
+from .lib.utilities.utility import systemUUID, LiotaConfigPath
 
 LiotaConfigPath().setup_logging()
 systemUUID()

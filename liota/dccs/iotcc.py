@@ -327,7 +327,7 @@ class IotControlCenter(DataCenterComponent):
                 json.dump(msg, f, sort_keys=True, indent=4, ensure_ascii=False)
                 log.debug('Initialized ' + iotcc_path)
             f.close()
-        except IOError, err:
+        except IOError as err:
             log.error('Could not open {0} file '.format(iotcc_path) + err)
         return iotcc_path
 
@@ -340,7 +340,7 @@ class IotControlCenter(DataCenterComponent):
             with open(self._iotcc_json, 'r') as f:
                 msg = json.load(f)
             f.close()
-        except IOError, err:
+        except IOError as err:
             log.error('Could not open {0} file '.format(self._iotcc_json) + str(err))
         log.debug('{0}:{1}'.format(entity_name, reg_entity_id))
         if entity_type == "HelixGateway":
@@ -372,7 +372,7 @@ class IotControlCenter(DataCenterComponent):
             with open(self._iotcc_json, 'r') as f:
                 msg = json.load(f)
             f.close()
-        except IOError, err:
+        except IOError as err:
             log.error('Could not open {0} file '.format(self._iotcc_json) + str(err))
         log.debug('Remove {0}:{1} from iotcc.json'.format(entity_name, reg_entity_id))
         if msg["iotcc"]["EdgeSystem"]["SystemName"] == entity_name and msg["iotcc"]["EdgeSystem"][
@@ -419,7 +419,7 @@ class IotControlCenter(DataCenterComponent):
                 json.dump(msg, f, sort_keys=True, indent=4, ensure_ascii=False)
                 log.debug('Initialized ' + file_path)
             f.close()
-        except IOError, err:
+        except IOError as err:
             log.error('Could not open {0} file '.format(file_path) + err)
 
     def store_edge_system_info(self, uuid, name, prop_dict, remove):
@@ -567,7 +567,7 @@ class IotControlCenter(DataCenterComponent):
                 else:
                     log.error('Could not open config file ' + fullPath)
                     return None
-            except IOError, err:
+            except IOError as err:
                 log.error('Could not open config file')
                 return None
         else:

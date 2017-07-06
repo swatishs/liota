@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os 
 import sys
 import hashlib
@@ -20,8 +21,8 @@ def sha1sum(path_file):
 
 # main
 param_1= sys.argv[1] 
-print 'Params=', param_1
+print('Params=', param_1)
 filen = param_1
-print "File: ", filen
+print("File: ", filen)
 sum = sha1sum(filen)
-print "Checksum=", sum.hexdigest()
+print("Checksum=", sum.hexdigest())
