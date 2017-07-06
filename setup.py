@@ -42,12 +42,17 @@ requirements = [str(requirement.req) for requirement in parse_requirements(
     'requirements.txt', session=pip.download.PipSession())]
 
 # Python Version check
-if not sys.version_info[0] == 2:
+if sys.version_info[0] == 2:
+    # Python 2.7.9 sub-version check
+    if sys.version_info[1] < 7 or \
+            sys.version_info[1] == 7 and sys.version_info[2] < 9:
+        sys.exit('Python versions lower than 2.7.9 are not supported')
+elif sys.version_info[0] == 3:
+    # Python 3 sub-version check
+    # TODO
+    pass
+else:
     sys.exit('Python 3 is not supported')
-
-# Python 2.7.9 sub-version check
-if sys.version_info[1] <= 7 and sys.version_info[2] < 9:
-    sys.exit('Python 2.7.9+ versions are only supported')
 
 # Get the long description from the README file
 with open('README.md') as f:
@@ -82,7 +87,7 @@ setup(
         # 'Programming Language :: Python :: 3',
         # 'Programming Language :: Python :: 3.3',
         # 'Programming Language :: Python :: 3.4',
-        # 'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.5',
     ],
 
     keywords='iot liota agent',

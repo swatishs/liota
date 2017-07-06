@@ -30,6 +30,10 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from __future__ import print_function
+from __future__ import division
+from builtins import range
+from past.utils import old_div
 from liota.lib.utilities.si_unit import *
 
 #---------------------------------------------------------------------------
@@ -72,22 +76,22 @@ def main():
         return (str_prefix, str_unit_name)
 
     for j in range(0, 4):
-        print print_split
-        print "  " + c_bold(c_cyan("Table %d")) % (j + 1)
-        print print_split
+        print(print_split)
+        print("  " + c_bold(c_cyan("Table %d")) % (j + 1))
+        print(print_split)
         for obj_unit in unit_tables(ureg)[j]:
             str_prefix, str_unit_name = parse_unit_with_color(obj_unit)
-            print "  " + (c_bold("%s") + " - %s, %s") % (
+            print("  " + (c_bold("%s") + " - %s, %s") % (
                 obj_unit,
                 str_prefix,
                 str_unit_name
-            )
+            ))
 
-    print print_split
-    print "  " + c_bold(c_yellow("Supported Prefixes"))
-    print print_split
+    print(print_split)
+    print("  " + c_bold(c_yellow("Supported Prefixes")))
+    print(print_split)
     for multiplier, str_prefix in sorted(prefixes.items()):
-        print "  " + (c_bold("%s") + " = %.2e") % (str_prefix, multiplier)
+        print("  " + (c_bold("%s") + " = %.2e") % (str_prefix, multiplier))
 
     units_prefixed = [
         ureg.km,    ureg.dm,    ureg.cm,    ureg.mm,    ureg.um,
@@ -103,16 +107,16 @@ def main():
         ureg.Mohm,  ureg.kohm,
     ]
 
-    print print_split
-    print "  " + c_bold(c_yellow("Prefixed Units"))
-    print print_split
+    print(print_split)
+    print("  " + c_bold(c_yellow("Prefixed Units")))
+    print(print_split)
     for obj_unit in units_prefixed:
         str_prefix, str_unit_name = parse_unit_with_color(obj_unit)
-        print "  " + (c_bold("%s") + " - %s, %s") % (
+        print("  " + (c_bold("%s") + " - %s, %s") % (
             obj_unit,
             str_prefix,
             str_unit_name
-        )
+        ))
 
     units_invalid = [
         ureg.deg,   ureg.ft,    ureg.inch,  ureg.yard,  ureg.mile,
@@ -122,23 +126,23 @@ def main():
         ureg.L,
         ureg.dm ** 3,           ureg.cm ** 2,
         ureg.kph,
-        ureg.km / ureg.s,
-        ureg.um / ureg.ms,
+        old_div(ureg.km, ureg.s),
+        old_div(ureg.um, ureg.ms),
         ureg.kWh,
         ureg.s ** -1,           ureg.kg ** -1
     ]
 
-    print print_split
-    print "  " + c_bold(c_red("Invalid Units"))
-    print print_split
+    print(print_split)
+    print("  " + c_bold(c_red("Invalid Units")))
+    print(print_split)
     for obj_unit in units_invalid:
         str_prefix, str_unit_name = parse_unit_with_color(obj_unit)
-        print "  " + (c_bold("%s") + " - %s, %s") % (
+        print("  " + (c_bold("%s") + " - %s, %s") % (
             obj_unit,
             str_prefix,
             str_unit_name
-        )
+        ))
 
-    print print_split
+    print(print_split)
 
 main()

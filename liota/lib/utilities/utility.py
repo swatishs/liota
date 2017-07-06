@@ -87,7 +87,7 @@ class systemUUID(object):
                 random.seed(1234567)
                 mac = random.randint(0, 281474976710655)
         m = hashlib.md5()
-        m.update(str(mac))
+        m.update(str(mac).encode("utf-8"))
         self.macHash = m.hexdigest()
         return self.macHash
 
@@ -115,7 +115,7 @@ class systemUUID(object):
         # all resources with the same resource name will have the same uuid, on this system
         # resources created on a different system with a name used on this
         # system will have *different* uuids' as it should be
-        tmp = str(uuid.uuid5(self._get_system_uuid(), resource_name.encode('utf-8')))
+        tmp = str(uuid.uuid5(self._get_system_uuid(), resource_name))
         log.info('resource: ' + resource_name + '  uuid=' + str(tmp))
         return str(tmp)
 

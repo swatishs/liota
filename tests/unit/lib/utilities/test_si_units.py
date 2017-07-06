@@ -29,6 +29,8 @@
 #  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF     #
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
+from __future__ import division
+from past.utils import old_div
 import unittest
 
 from liota.lib.utilities.si_unit import *
@@ -55,8 +57,8 @@ class TestSIUnits(unittest.TestCase):
         ureg.MV, ureg.kV, ureg.mV,
         ureg.uF, ureg.nF, ureg.pF,
         ureg.Mohm, ureg.kohm,
-        ureg.km / ureg.s,
-        ureg.um / ureg.ms,
+        old_div(ureg.km, ureg.s),
+        old_div(ureg.um, ureg.ms),
     ]
 
     # units that aren't supported in liota

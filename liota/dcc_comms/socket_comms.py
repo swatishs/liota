@@ -65,7 +65,7 @@ class SocketDccComms(DCCComms):
     def send(self, message, msg_attr=None):
         log.debug("Publishing message:" + str(message))
         if self.client is not None:
-            self.client.sendall(message)
+            self.client.sendall(message.encode("utf-8"))
 
     def receive(self):
         raise NotImplementedError

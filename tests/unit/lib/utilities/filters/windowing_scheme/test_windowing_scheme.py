@@ -30,6 +30,8 @@
 #  THE POSSIBILITY OF SUCH DAMAGE.                                            #
 # ----------------------------------------------------------------------------#
 
+from __future__ import division
+from past.utils import old_div
 import time
 import unittest
 
@@ -45,7 +47,7 @@ class WindowingSchemeTest(unittest.TestCase):
         """Initialize lower bound, upper bound and a filter for Windowing scheme test"""
         self.lower_bound = 10
         self.upper_bound = 20
-        self.middle_value = (self.lower_bound + self.upper_bound)/2
+        self.middle_value = old_div((self.lower_bound + self.upper_bound),2)
         self.more_than_upper_bound = self.upper_bound + 10
         self.window_test_filter = RangeFilter(Type.CLOSED, self.lower_bound, self.upper_bound)
 
