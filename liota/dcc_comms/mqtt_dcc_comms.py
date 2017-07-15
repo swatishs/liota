@@ -150,7 +150,8 @@ class MqttDccComms(DCCComms):
            :param msg_attr: MqttMessagingAttributes Object, userdata as queue
            :return:
            """
-        userdata.put(str(msg.payload))
+        # userdata.put(str(msg.payload))
+        userdata.put(msg.payload.decode("utf-8"))
 
     def send(self, message, msg_attr=None):
         """
