@@ -701,7 +701,7 @@ class PackageThread(Thread):
                 self._resource_registry.get_package_registry(file_name)
             )
         except Exception as er:
-            log.error("Exception in initialization: %s" % str(er))
+            log.exception("Exception in initialization: %s" % str(er))
             return None
         package_record.set_sha1(sha1)
         package_record.set_ext(file_ext)
