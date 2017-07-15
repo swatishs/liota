@@ -133,7 +133,7 @@ def get_default_network_interface():
     :return: Default Network Interface of the Edge_System
     """
     cmd = "route | grep '^default' | grep -o '[^ ]*$'"
-    nw_iface = str(subprocess.check_output(cmd, shell=True)).rstrip()
+    nw_iface = subprocess.check_output(cmd, shell=True).decode("utf-8").rstrip()
     log.info("Default network interface is : {0}".format(nw_iface))
     return nw_iface
 
@@ -147,7 +147,7 @@ def get_disk_name():
     :return: Disk type of the Edge_System
     """
     cmd = "lsblk -io KNAME,TYPE | grep 'disk' | sed -n '1p' | grep -o '^\S*'"
-    disk_name = str(subprocess.check_output(cmd, shell=True)).rstrip()
+    disk_name = subprocess.check_output(cmd, shell=True).decode("utf-8").rstrip()
     log.info("Disk name is : {0}".format(disk_name))
     return disk_name
 
