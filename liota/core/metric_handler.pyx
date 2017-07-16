@@ -56,11 +56,11 @@ send_thread = None
 collect_thread_pool = None
 
 class SystemExit:
-	def __cmp__(self, other):
-		return 1
+    def __cmp__(self, other):
+        return 1
 
-	def __lt__(self, other):
-		return False
+    def __lt__(self, other):
+        return False
 
 class EventsPriorityQueue(PriorityQueue):
 
