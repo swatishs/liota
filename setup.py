@@ -36,6 +36,8 @@ import pip
 import sys
 from pip.req import parse_requirements
 from setuptools import setup, find_packages
+from setuptools.extension import Extension
+from Cython.Build import cythonize
 
 
 requirements = [str(requirement.req) for requirement in parse_requirements(
@@ -53,6 +55,13 @@ elif sys.version_info[0] == 3:
     pass
 else:
     sys.exit('Python 3 is not supported')
+
+extensions = [
+    Extension(
+        "liota.*",
+        ["liota/**/*.pyx"]
+    )
+]
 
 # Get the long description from the README file
 with open('README.md') as f:
@@ -91,6 +100,7 @@ setup(
     ],
 
     keywords='iot liota agent',
+    ext_modules=cythonize(extensions, build_dir="build"),
 
     # Installation requirement
     install_requires=requirements,
