@@ -38,7 +38,6 @@ from builtins import range
 from builtins import object
 from past.utils import old_div
 from queue import Queue, PriorityQueue, Full
-import heapq
 import logging
 from threading import Thread, Condition, Lock
 from time import time as _time
@@ -74,8 +73,7 @@ class EventsPriorityQueue(PriorityQueue):
         try:
             first_element_before_insertion = None
             if self._qsize() > 0:
-                first_element_before_insertion = heapq.nsmallest(1, self.queue)[
-                    0]
+                first_element_before_insertion = self.queue[0]
 
             if self.maxsize > 0:
                 if not block:
@@ -97,7 +95,7 @@ class EventsPriorityQueue(PriorityQueue):
             self.unfinished_tasks += 1
             self.not_empty.notify()
 
-            first_element_after_insertion = heapq.nsmallest(1, self.queue)[0]
+            first_element_after_insertion = self.queue[0]
             if first_element_before_insertion != first_element_after_insertion:
                 self.first_element_changed.notify()
         finally:
@@ -109,7 +107,7 @@ class EventsPriorityQueue(PriorityQueue):
             isNotReady = True
             while isNotReady:
                 if self._qsize() > 0:
-                    first_element = heapq.nsmallest(1, self.queue)[0]
+                    first_element = self.queue[0]
                     if isinstance(first_element, SystemExit):
                         first_element = self._get()
                         break
@@ -125,7 +123,7 @@ class EventsPriorityQueue(PriorityQueue):
                     self.first_element_changed.wait(timeout)
                 else:
                     self.first_element_changed.wait()
-                    first_element = heapq.nsmallest(1, self.queue)[0]
+                    first_element = self.queue[0]
                 if isinstance(first_element, SystemExit):
                     first_element = self._get()
                     break
