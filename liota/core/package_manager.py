@@ -590,7 +590,7 @@ class PackageThread(Thread):
             else:  # should not happen
                 raise RuntimeError("File extension category error")
         except Exception as err:
-            log.error("Error loading module: %s" % str(err))
+            log.exception("Error loading module: %s" % str(err))
             return None, None
 
         log.debug("Loaded module: %s" % module_loaded.__name__)
@@ -768,7 +768,7 @@ class PackageThread(Thread):
         try:
             package_obj.clean_up()
         except Exception as er:
-            log.error("Exception in clean-up: %s" % er)
+            log.exception("Exception in clean-up: %s" % er)
 
         # Remove dependent item from dependencies
         log.debug("Package %s depends on: %s"
