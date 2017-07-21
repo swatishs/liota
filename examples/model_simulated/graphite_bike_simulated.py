@@ -164,7 +164,7 @@ if __name__ == '__main__':
                                port=config['GraphitePort']))
     graphite_reg_dev = graphite.register(bike_model)
 
-    metric_name = "model.bike.speed"
+    metric_name = "swatish.bike.speed"
     bike_speed = Metric(
         name=metric_name,
         unit=(old_div(ureg.m, ureg.sec)),
@@ -175,7 +175,7 @@ if __name__ == '__main__':
     graphite.create_relationship(graphite_reg_dev, reg_bike_speed)
     reg_bike_speed.start_collecting()
 
-    metric_name = "model.bike.power"
+    metric_name = "swatish.bike.power"
     bike_power = Metric(
         name=metric_name,
         unit=ureg.watt,
