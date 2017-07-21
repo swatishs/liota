@@ -153,7 +153,7 @@ class PackageClass(LiotaPackage):
         # Create metrics
         self.metrics = []
 
-        metric_name = "model.bike.speed"
+        metric_name = "swatish.bike.speed"
         bike_speed = Metric(
             name=metric_name,
             unit=(old_div(ureg.m, ureg.sec)),
@@ -165,7 +165,7 @@ class PackageClass(LiotaPackage):
         reg_bike_speed.start_collecting()
         self.metrics.append(reg_bike_speed)
 
-        metric_name = "model.bike.power"
+        metric_name = "swatish.bike.power"
         bike_power = Metric(
             name=metric_name,
             unit=ureg.watt,
